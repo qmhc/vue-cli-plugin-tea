@@ -1,0 +1,9 @@
+@charset 'UTF-8';
+
+@import './variable.scss';
+<%_ if (useVexip) { _%>
+@import '~vexip-ui/src/style/index.scss';
+<%_ } else { _%>
+@import './normalize.scss';
+<%_ } _%>
+@import './common.scss';

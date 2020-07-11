@@ -1,0 +1,24 @@
+{
+  "author": {
+    "name": "qmhc"
+  },
+  "description": "为项目初始化提供更好的 lint 支持与更全面的目录结构",
+  "homepage": "https://github.com/qmhc/vue-cli-plugin-tea#readme",
+  "keywords": [
+    "vue",
+    "vue-cli",
+    "lint",
+    "vexip-ui",
+    "vexip",
+    "tea",
+    "plugin",
+    "plugin-tea"
+  ],
+  "name": "vue-cli-plugin-tea",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qmhc/vue-cli-plugin-tea.git"
+  },
+  "private": false,
+  "version": "0.1.0"
+}
