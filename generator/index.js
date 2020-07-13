@@ -4,8 +4,16 @@ module.exports = (api, options, rootOptions) => {
   const useTypeScript = api.hasPlugin('typescript')
   const useSass = rootOptions.cssPreprocessor && rootOptions.cssPreprocessor.includes('sass')
   const useRouter = rootOptions.router || api.hasPlugin('router')
+  const useVexip = options.useVexip
+  const useService = options.useService
+  const useAxios = options.useAxios
 
-  api.exitLog('useRouter: ' + useRouter)
+  api.exitLog('Use Router: ' + useRouter)
+  api.exitLog('Use TypeScript: ' + useTypeScript)
+  api.exitLog('Use Sass: ' + useSass)
+  api.exitLog('Use Vexip: ' + useVexip)
+  api.exitLog('Use Service: ' + useService)
+  api.exitLog('Use Axios: ' + useAxios)
 
   api.postProcessFiles(files => {
     for (const file in files) {
@@ -19,7 +27,7 @@ module.exports = (api, options, rootOptions) => {
     useSass,
     useTypeScript,
     useRouter,
-    useVexip: options.useVexip
+    useVexip
   })
 
   if (useRouter) {
@@ -38,15 +46,15 @@ module.exports = (api, options, rootOptions) => {
     }
   }
 
-  if (options.useService) {
+  if (useService) {
     api.render('./template/service', {
-      useAxios: options.useAxios
+      useAxios
     })
   }
 
   if (useSass) {
     api.render('./template/style/scss', {
-      useVexip: options.useVexip
+      useVexip
     })
   } else {
     api.render('./template/style/scss')
@@ -85,7 +93,7 @@ module.exports = (api, options, rootOptions) => {
     })
   }
 
-  if (options.useVexip) {
+  if (useVexip) {
     api.extendPackage({
       dependencies: {
         'vexip-ui': '^0.8.13'
