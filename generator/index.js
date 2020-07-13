@@ -1,39 +1,45 @@
 module.exports = (api, options, rootOptions) => {
   const { EOL } = require('os')
   const fs = require('fs')
-  const useTypeScript = api.hasPlugin('typescript')
-  const useSass = rootOptions.cssPreprocessor && rootOptions.cssPreprocessor.includes('sass')
   const useRouter = rootOptions.router || api.hasPlugin('router')
-  const useVexip = options.useVexip
+  const useTypeScript = api.hasPlugin('typescript')
   const useService = options.useService
-  const useAxios = options.useAxios
+  const useMock = options.useMock
+  const useVexip = options.useVexip
+  const useSass = rootOptions.cssPreprocessor && rootOptions.cssPreprocessor.includes('sass')
+
+  const renderOptions = {
+    useRouter,
+    useTypeScript,
+    useService,
+    useMock,
+    useVexip,
+    useSass
+  }
 
   api.exitLog('Use Router: ' + useRouter)
   api.exitLog('Use TypeScript: ' + useTypeScript)
-  api.exitLog('Use Sass: ' + useSass)
-  api.exitLog('Use Vexip: ' + useVexip)
   api.exitLog('Use Service: ' + useService)
-  api.exitLog('Use Axios: ' + useAxios)
+  api.exitLog('Use Mock: ' + useMock)
+  api.exitLog('Use Vexip: ' + useVexip)
+  api.exitLog('Use Sass: ' + useSass)
 
   api.postProcessFiles(files => {
     for (const file in files) {
       if (/(Home|About|HelloWorld)\.vue/i.test(file)) {
         delete files[file]
       }
+
+      if (useVexip && /normalize.s?css/i.test(file)) {
+        delete files[file]
+      }
     }
   })
 
-  api.render('./template/common', {
-    useSass,
-    useTypeScript,
-    useRouter,
-    useVexip
-  })
+  api.render('./template/common', renderOptions)
 
   if (useRouter) {
-    api.render('./template/router', {
-      useTypeScript
-    })
+    api.render('./template/router', renderOptions)
 
     if (useTypeScript) {
       api.onCreateComplete(() => {
@@ -47,17 +53,31 @@ module.exports = (api, options, rootOptions) => {
   }
 
   if (useService) {
-    api.render('./template/service', {
-      useAxios
+    api.render('./template/service', renderOptions)
+  }
+
+  if (useMock) {
+    api.extendPackage({
+      devDependencies: {
+        mockjs: '^1.1.0'
+      }
     })
+
+    api.render('./template/mock', renderOptions)
+
+    if (useTypeScript) {
+      api.extendPackage({
+        devDependencies: {
+          '@types/mockjs': '^1.0.2'
+        }
+      })
+    }
   }
 
   if (useSass) {
-    api.render('./template/style/scss', {
-      useVexip
-    })
+    api.render('./template/style/scss', renderOptions)
   } else {
-    api.render('./template/style/scss')
+    api.render('./template/style/css', renderOptions)
   }
 
   api.extendPackage({
@@ -68,6 +88,9 @@ module.exports = (api, options, rootOptions) => {
       'cz-customizable': {
         config: 'scripts/cz-config.js'
       }
+    },
+    dependencies: {
+      axios: '^0.19.2'
     },
     devDependencies: {
       chalk: '^4.1.0',
@@ -84,14 +107,6 @@ module.exports = (api, options, rootOptions) => {
       'serve:prod': 'vue-cli-service serve --mode production'
     }
   })
-
-  if (options.useAxios) {
-    api.extendPackage({
-      dependencies: {
-        axios: '^0.19.2'
-      }
-    })
-  }
 
   if (useVexip) {
     api.extendPackage({
@@ -142,6 +157,21 @@ module.exports = (api, options, rootOptions) => {
         fs.writeFileSync(api.resolve('./src/vexip-ui.d.ts'), `declare module 'vexip-ui'${EOL}`, { encoding: 'utf-8' })
       })
     }
+  }
+
+  if (useMock) {
+    api.onCreateComplete(() => {
+      const contentMain = fs.readFileSync(api.resolve(api.entryFile), { encoding: 'utf-8' })
+
+      if (!contentMain.includes(`require('./mock')`)) {
+        const reverseLines = contentMain.split(/\r?\n/g).reverse()
+
+        const importIndex = reverseLines.findIndex(line => line.match(/^import/))
+    
+        reverseLines[importIndex] += `${EOL}${EOL}if (process.env.NODE_ENV === 'development') {${EOL}  require('./mock')${EOL}}${EOL}`
+        fs.writeFileSync(api.entryFile, reverseLines.reverse().join(EOL), { encoding: 'utf-8' })
+      }
+    })
   }
 
   if (options.useStylelint) {

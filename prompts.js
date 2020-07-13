@@ -6,11 +6,11 @@ module.exports = [
     default: true
   },
   {
-    name: 'useAxios',
+    name: 'useMock',
     type: 'confirm',
-    message: 'Use axios (使用 axios) ?',
+    message: 'Use mock (使用 mock) ?',
     default: true,
-    when: options => options.useService,
+    when: options => options.useService
   },
   {
     name: 'useVexip',

@@ -3,6 +3,7 @@ module.exports = {
   env: {
     node: true
   },
+  <%_ if (useTypeScript) { _%>
   extends: [
     'plugin:vue/essential',
     'plugin:vue/strongly-recommended',
@@ -13,6 +14,17 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020
   },
+  <%_ } else { _%>
+  extends: [
+    'plugin:vue/essential',
+    'plugin:vue/strongly-recommended',
+    'plugin:vue/recommended',
+    '@vue/standard'
+  ],
+  parserOptions: {
+    parser: 'babel-eslint'
+  },
+  <%_ } _%>
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
@@ -24,6 +36,7 @@ module.exports = {
         asyncArrow: 'always'
       }
     ],
+    <%_ if (useTypeScript) { _%>
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
     '@typescript-eslint/member-delimiter-style': [
@@ -46,6 +59,7 @@ module.exports = {
       }
     ],
     '@typescript-eslint/no-unnecessary-condition': 'off',
+    <%_ } _%>
     'vue/eqeqeq': 'error',
     'vue/object-curly-spacing': 'error',
     'vue/require-direct-export': 'error',
@@ -89,18 +103,39 @@ module.exports = {
         svg: 'always',
         math: 'always'
       }
+    ],
+    'vue/order-in-components': [
+      'error',
+      {
+        order: [
+          'el',
+          'name',
+          'parent',
+          'functional',
+          ['delimiters', 'comments'],
+          ['components', 'directives', 'filters'],
+          'extends',
+          'mixins',
+          'inheritAttrs',
+          'model',
+          ['inject', 'provide'],
+          ['props', 'propsData'],
+          'fetch',
+          'asyncData',
+          'data',
+          'computed',
+          'watch',
+          'LIFECYCLE_HOOKS',
+          'methods',
+          'head',
+          ['template', 'render'],
+          'renderError'
+        ]
+      }
     ]
   },
   overrides: [
-    {
-      files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)'
-      ],
-      env: {
-        jest: true
-      }
-    },
+    <%_ if (useTypeScript) { _%>
     {
       files: ['*.ts', '*.tsx'],
       rules: {
@@ -111,6 +146,16 @@ module.exports = {
       files: ['*.config.{j,t}s'],
       rules: {
         '@typescript-eslint/no-var-requires': 'off'
+      }
+    },
+    <%_ } _%>
+    {
+      files: [
+        '**/__tests__/*.{j,t}s?(x)',
+        '**/tests/unit/**/*.spec.{j,t}s?(x)'
+      ],
+      env: {
+        jest: true
       }
     }
   ]

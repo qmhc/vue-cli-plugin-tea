@@ -1,6 +1,4 @@
-<%_ if (useAxios) { _%>
 import Axios from 'axios'
-<%_ } _%>
 
 let address
 
@@ -11,11 +9,19 @@ if (process.env.NODE_ENV === 'development') {
 
   address = `${PROTOCOL}//${HOST}:${PORT}`
 } else {
-  address = '/'
+  address = ''
 }
 
 export const API_BASE_URL = address
 
-<%_ if (useAxios) { _%>
 Axios.defaults.baseURL = API_BASE_URL
-<%_ } _%>
+
+Axios.interceptors.response.use(response => {
+  if (response.status !== 200) {
+    return Promise.resolve({ status: 0 })
+  }
+
+  const data = response.data
+
+  return Promise.resolve(data)
+}, error => Promise.reject(error))
