@@ -54,6 +54,7 @@ module.exports = (api, options, rootOptions) => {
 
   if (useService) {
     api.render('./template/service', renderOptions)
+    api.injectImports(api.entryFile, `import './service'`)
   }
 
   if (useMock) {
