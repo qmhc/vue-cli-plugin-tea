@@ -200,6 +200,8 @@ module.exports = (api, options, rootOptions) => {
     const jsRE = /\.js$/
     const excludeRE = /^scripts?\/|tests\/e2e\/|(\.config|rc)\.js$/
 
+    api.render('./template/shims', renderOptions)
+
     api.postProcessFiles(files => {
       for (const file in files) {
         if (jsRE.test(file) && !excludeRE.test(file)) {

@@ -1,11 +1,21 @@
 import Axios from 'axios'
+<%_ if (useTypeScript) { _%>
+import { Result } from './index'
 
-export function queryExample()<%- useTypeScript ? ': Promise<any>' : '' %> {
-  return Axios.get('/example').then(result => {
-    if (result.status) {
-      return result.data
-    }
+export interface Person {
+  id: number
+  name: string
+  sex: 'male' | 'female'
+  age: number
+}
+<%_ } _%>
 
-    return []
-  })
+export async function queryPersons()<%- useTypeScript ? ': Promise<Person[]>' : '' %> {
+  const result = await Axios.get<%- useTypeScript ? ': <Result<Person[]>>' : '' %>('/person')
+  
+  if (result.status) {
+    return result.data
+  }
+
+  return []
 }

@@ -18,7 +18,7 @@ import { API_BASE_URL } from '../service'
 
 const Random = Mockjs.Random
 
-Mockjs.mock(API_BASE_URL + '/example', {
+Mockjs.mock(API_BASE_URL + '/person', {
   status: 1,
   message: 'ok',
   'data|5-10': [{

@@ -19,7 +19,7 @@
 
 <script>
 <%_ if (useMock) { _%>
-import { queryExample } from '../service/example'
+import { queryPersons } from '../service/example'
 
 export default {
   name: 'example',
@@ -31,7 +31,7 @@ export default {
     }
   },
   async created() {
-    this.persons = await queryExample()
+    this.persons = await queryPersons()
   },
   methods: {
   }
