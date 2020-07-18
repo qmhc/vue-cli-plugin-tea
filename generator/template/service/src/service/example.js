@@ -2,7 +2,7 @@ import Axios from 'axios'
 <%_ if (useTypeScript) { _%>
 import { Result } from './index'
 
-export interface Person {
+export interface Example {
   id: number
   name: string
   sex: 'male' | 'female'
@@ -10,8 +10,8 @@ export interface Person {
 }
 <%_ } _%>
 
-export async function queryPersons()<%- useTypeScript ? ': Promise<Person[]>' : '' %> {
-  const result = await Axios.get<%- useTypeScript ? ': <Result<Person[]>>' : '' %>('/person')
+export async function queryExamples()<%- useTypeScript ? ': Promise<Example[]>' : '' %> {
+  const result = await Axios.get<%- useTypeScript ? ': <Result<Example[]>>' : '' %>('/example')
   
   if (result.status) {
     return result.data

@@ -9,8 +9,8 @@
     </a>
     <%_ if (useMock) { _%>
     <ul style="margin-top: 15px">
-      <li v-for="person in persons" :key="person.id">
-        {{ `${person.name} - ${person.sex} - ${person.age}` }}
+      <li v-for="example in examples" :key="example.id">
+        {{ `${example.name} - ${example.sex} - ${example.age}` }}
       </li>
     </ul>
     <%_ } _%>
@@ -19,7 +19,7 @@
 
 <script>
 <%_ if (useMock) { _%>
-import { queryPersons } from '../service/example'
+import { queryExamples } from '../service/example'
 
 export default {
   name: 'example',
@@ -27,11 +27,11 @@ export default {
   },
   data () {
     return {
-      persons: []
+      examples: []
     }
   },
   async created() {
-    this.persons = await queryPersons()
+    this.examples = await queryExamples()
   },
   methods: {
   }
