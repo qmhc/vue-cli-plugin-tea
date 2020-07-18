@@ -112,7 +112,7 @@ module.exports = (api, options, rootOptions) => {
   if (useVexip) {
     api.extendPackage({
       dependencies: {
-        'vexip-ui': '^0.8.16'
+        'vexip-ui': '^0.8.18'
       }
     })
 
