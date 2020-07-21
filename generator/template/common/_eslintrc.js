@@ -137,9 +137,10 @@ module.exports = {
   overrides: [
     <%_ if (useTypeScript) { _%>
     {
-      files: ['*.vue'],
+      files: ['*.js', '*.vue'],
       rules: {
-        '@typescript-eslint/explicit-module-boundary-types': 'off'
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+        '@typescript-eslint/no-var-requires': 'off'
       }
     },
     {
