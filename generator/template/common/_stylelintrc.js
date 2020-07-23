@@ -36,6 +36,13 @@ module.exports = {
     ],
     <%_ } _%>
     'selector-no-vendor-prefix': true,
-    'value-no-vendor-prefix': true
+    'value-no-vendor-prefix': true,
+    'at-rule-empty-line-before': [
+      'always',
+      {
+        except: ['first-nested'],
+        ignore: ['blockless-after-same-name-blockless']
+      }
+    ]
   }
 }
