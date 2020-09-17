@@ -1,21 +1,17 @@
 import Axios from 'axios'
 <%_ if (useTypeScript) { _%>
-import { Result } from './index'
+import { Result, parseResult } from './index'
 
 export interface Example {
-  id: number
-  name: string
-  sex: 'male' | 'female'
+  id: number,
+  name: string,
+  sex: 'male' | 'female',
   age: number
 }
+<%_ } else { _%>
+import { parseResult } from './index'
 <%_ } _%>
 
 export async function queryExamples()<%- useTypeScript ? ': Promise<Example[]>' : '' %> {
-  const result = await Axios.get<%- useTypeScript ? ': <Result<Example[]>>' : '' %>('/example')
-  
-  if (result.status) {
-    return result.data
-  }
-
-  return []
+  return parseResult(await Axios.get<%- useTypeScript ? '<Result<Example[]>>' : '' %>('/example'), [])
 }

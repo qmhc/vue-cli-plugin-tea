@@ -7,6 +7,7 @@ module.exports = (api, options, rootOptions) => {
   const useMock = options.useMock
   const useVexip = options.useVexip
   const useSass = rootOptions.cssPreprocessor && rootOptions.cssPreprocessor.includes('sass')
+  const useStylelint = options.useStylelint
 
   const renderOptions = {
     useRouter,
@@ -14,7 +15,9 @@ module.exports = (api, options, rootOptions) => {
     useService,
     useMock,
     useVexip,
-    useSass
+    useSass,
+    useStylelint,
+    routerHistoryMode: rootOptions.router && rootOptions.router.historyMode
   }
 
   api.exitLog('Use Router: ' + useRouter)
@@ -175,7 +178,7 @@ module.exports = (api, options, rootOptions) => {
     })
   }
 
-  if (options.useStylelint) {
+  if (useStylelint) {
     api.extendPackage({
       devDependencies: {
         stylelint: '^13.6.1',
